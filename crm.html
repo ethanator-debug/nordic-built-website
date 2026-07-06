@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leads | Nordic Built</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .crm-wrap { max-width: 1180px; margin: 0 auto; padding: 48px 28px 100px; }
+  .crm-gate { max-width: 420px; margin: 90px auto; text-align: center; }
+  .crm-gate input { margin-bottom: 16px; }
+  .crm-bar { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-bottom: 30px; }
+  table.leads { width: 100%; border-collapse: collapse; background: var(--white); font-size: 0.88rem; }
+  table.leads th, table.leads td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--cream-line); vertical-align: top; }
+  table.leads th { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.6; background: var(--cream); }
+  table.leads td.msg { max-width: 320px; white-space: pre-wrap; }
+  table.leads tr:hover { background: rgba(62,77,63,0.04); }
+  .row-actions button { background:none; border:none; color:#8c281e; cursor:pointer; font-size:0.8rem; text-decoration:underline; padding:0; }
+  #crm-status { font-size: 0.9rem; opacity: 0.7; margin-bottom: 16px; }
+  #crm-error { display:none; background: rgba(140,40,30,0.08); border: 1px solid #8c281e; color: #8c281e; padding: 14px 16px; border-radius: 3px; font-size: 0.9rem; margin-bottom: 20px; }
+</style>
+</head>
+<body class="bg-cream">
+
+<header class="site-header">
+  <div class="nav-wrap">
+    <a href="index.html" class="brand"><img src="assets/logo-wordmark-cream.png" alt="Nordic Built"></a>
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">Our Story</a>
+      <a href="services.html">Craftsmanship</a>
+      <a href="mission.html">Mission &amp; Giving</a>
+      <a href="gallery.html">Our Work</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="crm-wrap">
+
+  <div id="crm-gate" class="crm-gate">
+    <div class="eyebrow">Internal</div>
+    <h1 style="font-size:2rem;">Leads Dashboard</h1>
+    <p class="lede" style="margin:0 auto 24px;">Enter the admin key you set in Vercel (ADMIN_KEY) to view contact-form submissions.</p>
+    <div class="form-group">
+      <input type="password" id="admin-key-input" placeholder="Admin key">
+    </div>
+    <button id="unlock-btn" class="btn btn-primary btn-block">View Leads</button>
+    <div id="crm-error" style="margin-top:16px;"></div>
+  </div>
+
+  <div id="crm-dashboard" style="display:none;">
+    <div class="crm-bar">
+      <h1 style="margin:0;font-size:1.8rem;">Leads</h1>
+      <div style="display:flex;gap:12px;">
+        <button id="refresh-btn" class="btn btn-outline-dark">Refresh</button>
+        <button id="export-btn" class="btn btn-outline-dark">Export CSV</button>
+        <button id="lock-btn" class="btn btn-outline-dark">Lock</button>
+      </div>
+    </div>
+    <div id="crm-status"></div>
+    <div style="overflow-x:auto;">
+      <table class="leads">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Project Type</th>
+            <th>Message</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="leads-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/main.js"></script>
+<script>
+(function () {
+  var gate = document.getElementById('crm-gate');
+  var dash = document.getElementById('crm-dashboard');
+  var keyInput = document.getElementById('admin-key-input');
+  var unlockBtn = document.getElementById('unlock-btn');
+  var lockBtn = document.getElementById('lock-btn');
+  var refreshBtn = document.getElementById('refresh-btn');
+  var exportBtn = document.getElementById('export-btn');
+  var errorBox = document.getElementById('crm-error');
+  var statusBox = document.getElementById('crm-status');
+  var tbody = document.getElementById('leads-body');
+  var currentLeads = [];
+
+  function getKey() { return sessionStorage.getItem('nb_admin_key') || ''; }
+  function setKey(k) { sessionStorage.setItem('nb_admin_key', k); }
+  function clearKey() { sessionStorage.removeItem('nb_admin_key'); }
+
+  function showDashboard() {
+    gate.style.display = 'none';
+    dash.style.display = 'block';
+    loadLeads();
+  }
+
+  function showGate(message) {
+    dash.style.display = 'none';
+    gate.style.display = 'block';
+    if (message) {
+      errorBox.textContent = message;
+      errorBox.style.display = 'block';
+    }
+  }
+
+  function escapeHtml(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function loadLeads() {
+    statusBox.textContent = 'Loading…';
+    tbody.innerHTML = '';
+    fetch('/api/leads', { headers: { 'x-admin-key': getKey() } })
+      .then(function (r) { return r.json().then(function (b) { return { ok: r.ok, body: b }; }); })
+      .then(function (result) {
+        if (!result.ok) throw new Error(result.body.error || 'Failed to load leads.');
+        currentLeads = result.body.leads || [];
+        statusBox.textContent = currentLeads.length + ' submission' + (currentLeads.length === 1 ? '' : 's');
+        tbody.innerHTML = currentLeads.map(function (lead) {
+          var date = new Date(lead.created_at).toLocaleString();
+          return '<tr>' +
+            '<td>' + escapeHtml(date) + '</td>' +
+            '<td>' + escapeHtml(lead.name) + '</td>' +
+            '<td><a href="mailto:' + escapeHtml(lead.email) + '">' + escapeHtml(lead.email) + '</a></td>' +
+            '<td>' + escapeHtml(lead.phone) + '</td>' +
+            '<td>' + escapeHtml(lead.project_type) + '</td>' +
+            '<td class="msg">' + escapeHtml(lead.message) + '</td>' +
+            '<td class="row-actions"><button data-id="' + lead.id + '">Delete</button></td>' +
+            '</tr>';
+        }).join('') || '<tr><td colspan="7" style="opacity:0.6;">No submissions yet.</td></tr>';
+      })
+      .catch(function (err) {
+        clearKey();
+        showGate(err.message);
+      });
+  }
+
+  unlockBtn.addEventListener('click', function () {
+    var key = keyInput.value.trim();
+    if (!key) return;
+    setKey(key);
+    errorBox.style.display = 'none';
+    showDashboard();
+  });
+  keyInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') unlockBtn.click();
+  });
+
+  lockBtn.addEventListener('click', function () {
+    clearKey();
+    keyInput.value = '';
+    showGate();
+  });
+
+  refreshBtn.addEventListener('click', loadLeads);
+
+  tbody.addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-id]');
+    if (!btn) return;
+    if (!confirm('Delete this lead permanently?')) return;
+    fetch('/api/leads?id=' + btn.getAttribute('data-id'), {
+      method: 'DELETE',
+      headers: { 'x-admin-key': getKey() }
+    }).then(function (r) {
+      if (r.ok) loadLeads();
+    });
+  });
+
+  exportBtn.addEventListener('click', function () {
+    if (!currentLeads.length) return;
+    var header = ['Date', 'Name', 'Email', 'Phone', 'Project Type', 'Message'];
+    var rows = currentLeads.map(function (l) {
+      return [l.created_at, l.name, l.email, l.phone, l.project_type, l.message]
+        .map(function (v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; })
+        .join(',');
+    });
+    var csv = [header.join(',')].concat(rows).join('\n');
+    var blob = new Blob([csv], { type: 'text/csv' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'nordic-built-leads.csv';
+    a.click();
+  });
+
+  if (getKey()) showDashboard();
+})();
+</script>
+</body>
+</html>

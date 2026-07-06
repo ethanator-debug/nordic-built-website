@@ -1,0 +1,16 @@
+Drop these exact filenames into this folder to replace the styled
+placeholder tiles with real photos. No code changes needed — each
+page checks for the file automatically and falls back to the current
+placeholder if it isn't there yet. JPG or PNG both work; landscape
+photos (roughly 4:3) crop best.
+
+  hero-craftsmanship.jpg     index.html   — "18 Years of Craftsmanship"
+  hero-mission-teaser.jpg    index.html   — "Purpose Over Profit"
+  hero-about-jobsite.jpg     about.html   — "Clean Job Sites, Honest Work"
+  hero-about-mark.jpg        about.html   — "Carved, Not Drawn"
+  hero-mission-cause.jpg     mission.html — "Giving Back, By Design"
+
+Gallery photos go in the gallery/ subfolder — see gallery/PUT_PHOTOS_HERE.txt.
+
+To add, remove, or retitle a gallery project (not just swap a photo),
+just ask — that one needs a small HTML edit to gallery.html.

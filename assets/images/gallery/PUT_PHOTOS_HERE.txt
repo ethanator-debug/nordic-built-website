@@ -1,0 +1,17 @@
+Drop these exact filenames into this folder to replace the gallery
+placeholder tiles on gallery.html with real project photos. Landscape
+photos (roughly 4:3) crop best.
+
+  kitchen-ashwood.jpg              The Ashwood Kitchen
+  millwork-crown-casing.jpg        Crown & Casing Package
+  builtin-library-wall.jpg         Study Library Wall
+  kitchen-longship-galley.jpg      The Longship Galley
+  builtin-mudroom-lockers.jpg      Mudroom Locker Wall
+  commercial-reception-desk.jpg    Reception Desk & Shelving
+  millwork-wainscoting.jpg         Wainscoting & Trim Suite
+  kitchen-walnut-steel.jpg         Walnut & Steel Kitchen
+  builtin-fireside-bookcase.jpg    Fireside Bookcase Wall
+
+Want a different project on this page entirely (new title, new photo,
+remove one)? Just ask and it'll be added — that needs a small edit to
+gallery.html rather than just a file drop.

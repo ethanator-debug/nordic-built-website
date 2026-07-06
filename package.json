@@ -1,0 +1,12 @@
+{
+  "name": "nordic-built-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Nordic Built marketing site + contact-form CRM (Vercel + Neon Postgres).",
+  "engines": {
+    "node": "20.x"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.9.0"
+  }
+}
