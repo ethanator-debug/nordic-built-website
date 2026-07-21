@@ -498,6 +498,20 @@ section { padding: 96px 0; }
   opacity: 0.65;
 }
 
+.gallery-empty {
+  display: none;
+  text-align: center;
+  padding: 90px 20px;
+  border: 1px dashed var(--cream-line);
+  border-radius: 4px;
+}
+.gallery-empty p {
+  font-family: var(--font-head);
+  font-size: 1.5rem;
+  color: var(--charcoal);
+  opacity: 0.8;
+}
+
 /* ---------- Contact ---------- */
 .contact-grid {
   display: grid;
