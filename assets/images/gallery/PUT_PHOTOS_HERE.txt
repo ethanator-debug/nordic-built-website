@@ -2,15 +2,19 @@ Drop these exact filenames into this folder to replace the gallery
 placeholder tiles on gallery.html with real project photos. Landscape
 photos (roughly 4:3) crop best.
 
-  kitchen-ashwood.jpg              The Ashwood Kitchen
-  millwork-crown-casing.jpg        Crown & Casing Package
-  builtin-library-wall.jpg         Study Library Wall
-  kitchen-longship-galley.jpg      The Longship Galley
-  builtin-mudroom-lockers.jpg      Mudroom Locker Wall
-  commercial-reception-desk.jpg    Reception Desk & Shelving
-  millwork-wainscoting.jpg         Wainscoting & Trim Suite
-  kitchen-walnut-steel.jpg         Walnut & Steel Kitchen
-  builtin-fireside-bookcase.jpg    Fireside Bookcase Wall
+  kitchen-ashwood.jpg              Wall Oven Tower (white kitchen, built-in double ovens)
+  millwork-crown-casing.jpg        Custom Barn Door (rustic sliding barn door)
+  builtin-library-wall.jpg         Study Library Wall (blue-gray built-in bookcases)
+  kitchen-longship-galley.jpg      Open Shelf Kitchen (white kitchen, black counters, open shelving)
+  builtin-mudroom-lockers.jpg      Bath Vanity (wood vanity, brass hardware, floral wallpaper)
+  commercial-reception-desk.jpg    Reception Desk & Shelving (still needs a photo)
+  millwork-wainscoting.jpg         Staircase Wainscoting (paneled stairwell wall)
+  kitchen-walnut-steel.jpg         Navy & Brass Island (navy kitchen island, granite top)
+  builtin-fireside-bookcase.jpg    Fireside Panel Wall (fireplace with raised-panel surround)
+  kitchen-brass-slate.jpg          Brass & Slate Kitchen (white kitchen, brass faucet, black slate niche)
+  kitchen-gray-island.jpg          Gray-Stained Island (gray-stained wood island, bronze hardware)
+  builtin-bunk-beds.jpg            Bunk Room & Slide (custom built-in bunk beds with slide)
+  builtin-shiplap-nook.jpg         Shiplap Media Nook (shiplap-ceiling nook, built-in TV/shelving)
 
 Want a different project on this page entirely (new title, new photo,
 remove one)? Just ask and it'll be added — that needs a small edit to
