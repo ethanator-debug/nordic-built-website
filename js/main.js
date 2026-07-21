@@ -26,13 +26,17 @@ document.addEventListener('DOMContentLoaded', function () {
         filterButtons.forEach(function (b) { b.classList.remove('active'); });
         btn.classList.add('active');
         var group = btn.getAttribute('data-filter');
+        var visibleCount = 0;
         galleryItems.forEach(function (item) {
           if (group === 'all' || item.getAttribute('data-category') === group) {
             item.style.display = '';
+            visibleCount++;
           } else {
             item.style.display = 'none';
           }
         });
+        var emptyMsg = document.getElementById('gallery-empty');
+        if (emptyMsg) emptyMsg.style.display = visibleCount === 0 ? 'block' : 'none';
       });
     });
   }
